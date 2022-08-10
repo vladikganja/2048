@@ -109,12 +109,11 @@ size_t Field::get_crc() {
     return crc;
 }
 
-Field::Field(int _size) {
+Field::Field() {
     auto now = std::chrono::high_resolution_clock::now();
     gen.seed(static_cast<unsigned>(now.time_since_epoch().count()));
     free.reserve(static_cast<size_t>(Utils::size * Utils::size));
 
-    Utils::size = _size;
     field.resize(Utils::size);
     for (int i = 0; i < Utils::size; i++) {
         field[i].resize(Utils::size);
@@ -129,7 +128,7 @@ Field::Field(int _size) {
 
 void Field::move(sf::Keyboard::Key key) {
 
-    size_t crc_before = get_crc();
+    size_t crc_before = get_crc(); // the state of the field before action
 
     switch (key) {
     case sf::Keyboard::Left:
@@ -148,7 +147,7 @@ void Field::move(sf::Keyboard::Key key) {
         break;
     }
 
-    size_t crc_after = get_crc();
+    size_t crc_after = get_crc(); // the state of the field after action
 
     find_free();
 
@@ -233,6 +232,10 @@ void Field::spawn() {
     int index = gen() % free.size();
     field[free[index].x][free[index].y]->add(((gen() % 2) + 1) * 2);
     free.erase(free.begin() + index);
+}
+
+void Field::set_score(int value) {
+    score = value;
 }
 
 int Field::get_score() {

@@ -24,13 +24,12 @@ private:
     std::vector<sf::Vector2i> free;
     int score;
 
-    void find_free();
     void push(std::stack<int>& stack, int number, bool& is_last_mixed);
     size_t get_crc();
 
 public:
 
-    Field(int size);
+    Field();
 
     std::vector<std::shared_ptr<Tile>> operator[](int index);
 
@@ -41,6 +40,8 @@ public:
     void move_right();
     void spawn();
 
+    void find_free();
+    void set_score(int value);
     int get_score();
     bool is_blocked();
     void clear();
